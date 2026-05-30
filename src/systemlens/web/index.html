@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SystemLens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <meta name="theme-color" content="#0a1018" />
+  </head>
+  <body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <div>
+          <p class="brand-title">SystemLens</p>
+          <p class="brand-sub">Local performance and reliability companion</p>
+        </div>
+      </div>
+      <div class="status-pill" id="status-pill">Connecting...</div>
+      <div class="auth-box">
+        <input id="auth-token" type="password" placeholder="Auth token" />
+        <button id="save-token">Save</button>
+      </div>
+      <button class="install-btn" id="install-btn" hidden>Install</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Know exactly why your device is slow.</h1>
+          <p>
+            SystemLens monitors CPU, memory, disk, network, and processes in real time. It detects
+            spikes, highlights root causes, and suggests fixes to keep your system healthy.
+          </p>
+          <div class="hero-meta">
+            <div>
+              <span class="meta-label">Device</span>
+              <span class="meta-value" id="device-name">-</span>
+            </div>
+            <div>
+              <span class="meta-label">OS</span>
+              <span class="meta-value" id="device-os">-</span>
+            </div>
+            <div>
+              <span class="meta-label">Cores</span>
+              <span class="meta-value" id="device-cores">-</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <h3>Live snapshot</h3>
+          <div class="metric-grid" id="headline-metrics"></div>
+          <div class="mini-console" id="headline-log">Waiting for metrics...</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Live performance</h2>
+          <p>CPU and memory trends with real-time streaming updates.</p>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <span>CPU usage</span>
+              <span class="chart-legend"><span class="legend-dot cpu"></span>Percent</span>
+            </div>
+            <canvas id="cpu-chart" height="200"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <span>Memory usage</span>
+              <span class="chart-legend"><span class="legend-dot mem"></span>Percent</span>
+            </div>
+            <canvas id="mem-chart" height="200"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>GPU & thermal</h2>
+            <p>GPU utilization, temperature, and fan data (if available).</p>
+          </div>
+          <div class="metric-grid" id="gpu-metrics"></div>
+          <div class="mini-console" id="thermal-log">No thermal data yet.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Battery health</h2>
+            <p>Battery drain modeling and charge state.</p>
+          </div>
+          <div class="metric-grid" id="battery-metrics"></div>
+        </div>
+      </section>
+
+      <section class="grid-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Top processes</h2>
+            <p>Highest CPU or memory consumers right now.</p>
+          </div>
+          <table class="data-table" id="process-table">
+            <thead>
+              <tr>
+                <th>Process</th>
+                <th>CPU %</th>
+                <th>Memory</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Alerts & recommendations</h2>
+            <p>Actionable steps based on detected anomalies.</p>
+          </div>
+          <ul class="alert-list" id="alert-list"></ul>
+        </div>
+      </section>
+
+      <section class="grid-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Fix now</h2>
+            <p>Apply quick actions to resolve issues.</p>
+          </div>
+          <div class="action-grid">
+            <button class="action-btn" id="kill-top">Kill top process</button>
+            <button class="action-btn" id="clear-temp">Clear temp files</button>
+            <div class="action-inline">
+              <input id="service-name" type="text" placeholder="Service name" />
+              <button class="action-btn" id="stop-service">Stop service</button>
+            </div>
+            <div class="action-output" id="action-output">Actions are admin-only.</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Exports</h2>
+            <p>Download metrics, alerts, and reports.</p>
+          </div>
+          <div class="action-grid">
+            <button class="action-btn" id="export-metrics">Export metrics (CSV)</button>
+            <button class="action-btn" id="export-alerts">Export alerts (CSV)</button>
+            <button class="action-btn" id="export-report">Generate report</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>History</h2>
+          <p>Recent metrics timeline with trends.</p>
+        </div>
+        <div class="history-grid">
+          <div class="history-card">
+            <div class="chart-header">
+              <span>Disk usage</span>
+            </div>
+            <canvas id="disk-chart" height="160"></canvas>
+          </div>
+          <div class="history-card">
+            <div class="chart-header">
+              <span>Network receive</span>
+            </div>
+            <canvas id="net-chart" height="160"></canvas>
+          </div>
+        </div>
+        <div class="timeline">
+          <h3>Incident timeline</h3>
+          <ul id="timeline-list"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>SystemLens runs locally and keeps your data private.</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
