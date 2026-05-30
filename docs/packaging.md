@@ -2,6 +2,8 @@
 
 ## Cross-platform packaging (PyInstaller)
 
+SystemLens is designed to launch as a local desktop app by default. The packaged executable starts the desktop shell and keeps the backend on-device.
+
 ### Windows (MSI)
 1) Install PyInstaller:
 ```
@@ -9,7 +11,7 @@ pip install pyinstaller
 ```
 2) Build executable:
 ```
-pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --add-data "src/systemlens/web;systemlens/web" src/systemlens/__main__.py
+pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --collect-all webview --add-data "src/systemlens/web;systemlens/web" src/systemlens/__main__.py
 ```
 3) Convert to MSI (optional):
 - Use WiX Toolset or Advanced Installer to wrap `dist/systemlens.exe` into an MSI.
@@ -17,7 +19,7 @@ pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --a
 ### macOS (DMG)
 1) Build:
 ```
-pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --add-data "src/systemlens/web:systemlens/web" src/systemlens/__main__.py
+pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --collect-all webview --add-data "src/systemlens/web:systemlens/web" src/systemlens/__main__.py
 ```
 2) Create DMG:
 ```
@@ -27,7 +29,7 @@ hdiutil create systemlens.dmg -srcfolder dist/systemlens.app
 ### Linux (AppImage)
 1) Build:
 ```
-pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --add-data "src/systemlens/web:systemlens/web" src/systemlens/__main__.py
+pyinstaller --onefile --name systemlens --paths src --collect-all systemlens --collect-all webview --add-data "src/systemlens/web:systemlens/web" src/systemlens/__main__.py
 ```
 2) Wrap into AppImage (optional) using appimagetool.
 

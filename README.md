@@ -2,6 +2,8 @@
 
 SystemLens is a production-grade local performance and reliability companion that turns any laptop or mobile-accessible device into a real-time observability dashboard. It monitors CPU, memory, disk, network, battery, and top processes, detects anomalies, and provides actionable recommendations. All data stays on the device by default.
 
+By default, SystemLens now launches as a native desktop app on your device. It still includes a local server mode for advanced users, but the normal experience is a local app window that runs entirely on the device.
+
 ## Highlights
 - Local-first monitoring with a secure local SQLite store
 - Real-time dashboard with live streaming updates
@@ -18,15 +20,19 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 2) Run SystemLens
+### 2) Run SystemLens as a local app
+```
+python -m systemlens
+```
+
+This opens a native SystemLens window on your device. No browser workflow is required.
+
+### 3) Run server mode instead
 ```
 python -m systemlens run --host 127.0.0.1 --port 8080
 ```
 
-### 3) Open the dashboard
-```
-http://127.0.0.1:8080
-```
+Use this only if you want browser/network access.
 
 To access on a phone in the same network:
 ```
@@ -51,7 +57,7 @@ Then open `http://<your-laptop-ip>:8080` on your phone.
 - Storage: local SQLite with retention
 - Detection: anomaly engine with seasonal baselines and per-app thresholds
 - API: FastAPI with SSE streaming and security
-- UI: responsive dashboard
+- UI: responsive dashboard plus native desktop shell
 
 ## Security & trust
 Enable auth for LAN usage:
